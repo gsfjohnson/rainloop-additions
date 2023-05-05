@@ -1,0 +1,20 @@
+name: rpmbuild
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: redwain/rpmbuild@el6
+      with:
+        spec_path: 'rainloop.spec'
+    - uses: redwain/rpmbuild@el7
+      with:
+        spec_path: 'rainloop.spec'
+    - uses: redwain/upload-release-asset@master
+      with:
+        files: 'rpmbuild/SRPMS/*.rpm;rpmbuild/RPMS/*.rpm'
+        github_token: ${{ secrets.GITHUB_TOKEN }}
